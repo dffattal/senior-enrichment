@@ -1,8 +1,9 @@
-import { SET_STUDENTS, SET_STUDENT } from '../action-creators/students'
+import { SET_STUDENTS, SET_STUDENT, SET_STUDENTS_IN_COURSE } from '../action-creators/students'
 
 const initialStudentsState = {
   list: [],
-  selected: {}
+  selected: {},
+  courseStudents: []
 }
 
 export default function (state = initialStudentsState, action) {
@@ -16,6 +17,10 @@ export default function (state = initialStudentsState, action) {
 
     case SET_STUDENT:
       newState.selected = action.selected
+      break;
+
+    case SET_STUDENTS_IN_COURSE:
+      newState.courseStudents = action.courseStudents
       break;
 
     default:

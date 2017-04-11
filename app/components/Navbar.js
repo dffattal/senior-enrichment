@@ -9,16 +9,16 @@ export default function (props) {
         <li className={location === "/" ? "active" : ""}>
           <Link to="/">Home</Link>
         </li>
-        <li className={location === "/campus" ? "active" : ""}>
+        <li className={location.slice(0, 7) === "/campus" ? "active" : ""}>
           <Link to="/campus">Campuses</Link>
         </li>
-        <li className={location === "/course" ? "active" : ""}>
+        <li className={location.slice(0, 7) === "/course" ? "active" : ""}>
           <Link to="/course">Courses</Link>
         </li>
-        <li className={location === "/instructor" ? "active" : ""}>
+        <li className={location.slice(0, 11) === "/instructor" ? "active" : ""}>
           <Link to="/instructor">Instructors</Link>
         </li>
-        <li className={location === "/student" ? "active" : ""}>
+        <li className={location.slice(0, 8) === "/student" ? "active" : ""}>
           <Link to="/student">Students</Link>
         </li>
       </ul>

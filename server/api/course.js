@@ -1,6 +1,9 @@
 const router = require('express').Router()
 const db = require('../../db')
 const Course = require('../../db/models/course')
+const Campus = require('../../db/models/campus')
+const Instructor = require('../../db/models/instructor')
+const Student = require('../../db/models/student')
 
 router.param('id', function (req, res, next, id) {
 	req.id = id
@@ -16,7 +19,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.get('/:id', function (req, res, next) {
-	Course.findById(req.id)
+	Course.findById(req.id, {include: [Campus, Instructor]})
 	.then(course => {
 		if (course) res.json(course)
 		else res.status(404).send('Course not found!')

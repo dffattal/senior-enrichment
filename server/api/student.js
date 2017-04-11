@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const db = require('../../db')
 const Student = require('../../db/models/student')
+const Campus = require('../../db/models/campus')
+const Course = require('../../db/models/course')
 
 router.param('id', function (req, res, next, id) {
 	req.id = id
@@ -8,7 +10,7 @@ router.param('id', function (req, res, next, id) {
 })
 
 router.get('/', function (req, res, next) {
-	Student.findAll()
+	Student.findAll({include: [Course]})
 	.then(students => {
 		res.json(students)
 	})
@@ -16,10 +18,26 @@ router.get('/', function (req, res, next) {
 })
 
 router.get('/:id', function (req, res, next) {
-	Student.findById(req.id)
+	Student.findById(req.id, {include: [Campus, Course]})
 	.then(student => {
 		if (student) res.json(student)
 		else res.status(404).send('Student not found!')
+	})
+	.catch(next)
+})
+
+router.get('/course/:id', function (req, res, next) {
+	Student.findAll({
+		include: [{
+			model: Course,
+			where: {
+				id: req.id
+			}
+		}]
+	})
+	.then(studentsInCourse => {
+		if (studentsInCourse) res.json(studentsInCourse)
+		else res.status(404).send('No students found!')
 	})
 	.catch(next)
 })

@@ -14,7 +14,6 @@ Student.belongsTo(Campus)
 Course.belongsTo(Campus)
 Instructor.belongsTo(Campus)
 Course.belongsTo(Instructor)
-Student.belongsToMany(Course, {through: 'courses-students'})
-
+Student.belongsToMany(Course, {through: 'student-course'})
 
 module.exports = {Student, Campus, Course, Instructor}
