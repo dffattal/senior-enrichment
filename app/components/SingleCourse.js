@@ -10,9 +10,11 @@ export default function SingleCourse (props) {
     course.id ?
     <div>
       <h2>{course.name}</h2>
+      <h4>{course.code}</h4>
       <h4>Campus: <Link to={`/campus/${campus.id}`}>{campus.name}</Link>.</h4>
       <h4>Instructor: <Link to={`/instructor/${instructor.id}`}>{instructor.name}</Link>.</h4>
       <p>~A description goes here!~</p>
+      <Link to={`/course/${course.id}/edit`}><button className="btn btn-primary">Edit this course</button></Link>
       <hr />
       <h4>Students:
         {students && students.map(student => (

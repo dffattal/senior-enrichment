@@ -1,4 +1,3 @@
-'use strict'
 import React from 'react'
 import {render} from 'react-dom'
 import { Provider } from 'react-redux'
@@ -13,30 +12,18 @@ import InstructorContainer from './containers/InstructorContainer'
 import SingleInstructorContainer from './containers/SingleInstructorContainer'
 import StudentContainer from './containers/StudentContainer'
 import SingleStudentContainer from './containers/SingleStudentContainer'
+import EditContainer from './containers/EditContainer'
 
 import store from './store'
 import Root from './components/Root'
 
-import { setCampuses, setCampus } from './action-creators/campuses'
-import { setCourses, setCourse } from './action-creators/courses'
-import { setInstructors, setInstructor } from './action-creators/instructors'
-import { setStudents, setStudent, setStudentsInCourse } from './action-creators/students'
+import { setCampus } from './action-creators/campuses'
+import { setCourse } from './action-creators/courses'
+import { setInstructor } from './action-creators/instructors'
+import { setStudent, setStudentsInCourse } from './action-creators/students'
+import { setThingToEdit } from './action-creators/edit'
 
-function onAppLoad () {
-  const pCampus = axios.get('/api/campus')
-  const pCourse = axios.get('/api/course')
-  const pInstructor = axios.get('/api/instructor')
-  const pStudent = axios.get('/api/student')
-  Promise.all([pCampus, pCourse, pInstructor, pStudent])
-  .then(results => results.map(result => result.data))
-  .then(([campuses, courses, instructors, students]) => {
-    store.dispatch(setCampuses(campuses))
-    store.dispatch(setCourses(courses))
-    store.dispatch(setInstructors(instructors))
-    store.dispatch(setStudents(students))
-  })
-  .catch(console.error)
-}
+import { onAppLoad } from './utils'
 
 function selectCampus (nextState) {
   let campusId = nextState.params.campusId
@@ -75,12 +62,24 @@ function selectInstructor (nextState) {
   .catch(console.error)
 }
 
-function selectStudent(nextState) {
+function selectStudent (nextState) {
   let studentId = nextState.params.studentId
   axios.get(`/api/student/${studentId}`)
   .then(response => response.data)
   .then(student => {
     store.dispatch(setStudent(student))
+  })
+  .catch(console.error)
+}
+
+function findThingToEdit (nextState) {
+  let paramsComponent = Object.keys(nextState.params)
+  let id = nextState.params[paramsComponent[0]]
+  let component = nextState.location.pathname.split('/')[1]
+  axios.get(`/api/${component}/${id}`)
+  .then(response => response.data)
+  .then(thingToEdit => {
+    store.dispatch(setThingToEdit(thingToEdit))
   })
   .catch(console.error)
 }
@@ -91,12 +90,16 @@ render (
       <Route path="/" component={Root} onEnter={onAppLoad}>
         <Route path="/campus" component={CampusContainer} />
         <Route path="/campus/:campusId" component={SingleCampusContainer} onEnter={selectCampus} />
+        <Route path="/campus/:campusId/edit" component={EditContainer} onEnter={findThingToEdit} />
         <Route path="/course" component={CourseContainer} />
         <Route path="/course/:courseId" component={SingleCourseContainer} onEnter={selectCourse} />
+        <Route path="/course/:courseId/edit" component={EditContainer} onEnter={findThingToEdit} />
         <Route path="/instructor" component={InstructorContainer} />
         <Route path="/instructor/:instructorId" component={SingleInstructorContainer} onEnter={selectInstructor} />
+        <Route path="/instructor/:instructorId/edit" component={EditContainer} onEnter={findThingToEdit} />
         <Route path="/student" component={StudentContainer} />
         <Route path="/student/:studentId" component={SingleStudentContainer} onEnter={selectStudent} />
+        <Route path="/student/:studentId/edit" component={EditContainer} onEnter={findThingToEdit} />
       </Route>
     </Router>
   </Provider>,

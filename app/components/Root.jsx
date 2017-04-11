@@ -21,6 +21,7 @@ export default class Root extends Component {
             <Navbar path="/" />
           </div>
         </nav>
+        {!this.props.children && <h1 style={{textAlign: 'center', fontSize: '800%'}}>Back to School!</h1>}
         <div className="col-lg-12 clearfix">
           {this.props.children}
         </div>

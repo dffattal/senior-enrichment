@@ -23,6 +23,7 @@ export default function SingleCampus (props) {
       <h2>{props.campus.name}</h2>
       <h3>Located in {props.campus.location}.</h3>
       <p>~A description goes here!~</p>
+      <Link to={`/campus/${props.campus.id}/edit`}><button className="btn btn-primary">Edit this campus</button></Link>
       <hr />
       {listCreator('course', props.courses)}
       {listCreator('instructor', props.instructors)}

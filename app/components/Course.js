@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-export default function Campus (props) {
+export default function Course (props) {
   return (
     <div>
       <h2>Courses</h2>
